@@ -17,6 +17,7 @@ $button = $_POST['button'];
 $pre_button = $_POST['pre_button'];
 $file_handle = null;
 $messages = array();
+$input_check = "";
 // $url = "http://localhost/Lesson/PHP/calculator_db/calcu_db.php";
 $dsn = 'mysql:host=localhost;unix_socket=/tmp/mysql.sock;dbname=calculator;charset=utf8';
 $user = 'root';
@@ -41,8 +42,10 @@ try {
 
 if (isNumBtn($button) || empty($button)) {
         if (isOpeBtn($pre_button)) {
+            $input_check = "num1";
             $input2 = $input2 . $button;
         } else {
+            $input_check = "num2";
             $input1 = $input1 . $button;
         }
     // if ($judge == "num1") {
@@ -102,10 +105,18 @@ if (isNumBtn($button) || empty($button)) {
             $pre_button = '';
             break;
         case '+/-':
-            $disp_num = -$disp_num;
+            if($input_check == "num1"){
+                $input1 = -$input1;
+            } else {
+                $input2 = -$input2;
+            }
             break;
         case '％':
-            $disp_num = $disp_num / 100;
+            if($input_check == "num1"){
+                $input1 = $input1 / 100;
+            } else {
+                $input2 = $input2 / 100;
+            }
             break;
         default:
             // if (!empty($pre_num) && (preg_match('/＝/', $button) || (isOpeBtn($button) && isNumBtn($pre_button)))) {
