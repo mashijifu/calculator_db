@@ -17,8 +17,12 @@ $button = $_POST['button'];
 $pre_button = $_POST['pre_button'];
 $file_handle = null;
 $messages = array();
-$input_check = "";
-// $url = "http://localhost/Lesson/PHP/calculator_db/calcu_db.php";
+// $input_check = $_POST['input_check'];
+if (empty($input1)) {
+    $input_check = "num1";
+} else {
+    $input_check = "num2";
+}
 $dsn = 'mysql:host=localhost;unix_socket=/tmp/mysql.sock;dbname=calculator;charset=utf8';
 $user = 'root';
 $pass = '';
@@ -42,11 +46,20 @@ try {
 
 if (isNumBtn($button) || empty($button)) {
         if (isOpeBtn($pre_button)) {
-            $input_check = "num1";
-            $input2 = $input2 . $button;
-        } else {
+            if (preg_match('/\./', $button)) {
+                $input2 = '0.';
+            } else {
+                $input2 = $button;
+            }
             $input_check = "num2";
-            $input1 = $input1 . $button;
+        } else {
+            if ($input_check == "num1") {
+                // $input_check = "num1";
+                $input1 = $input1 . $button;
+            } else {
+                // $input_check = "num2";
+                $input2 = $input2 . $button;
+            }
         }
     // if ($judge == "num1") {
     //     // if (isOpeBtn($pre_button)) {
@@ -231,6 +244,7 @@ $dbh = null;
         <input type="text" name="result" value="<?php echo $result; ?>" />
         <!-- ボタン値判別 -->
         <input type="text" name="pre_button" value="<?php echo $pre_button; ?>" />
+        <input type="text" name="input_check" value="<?php echo $input_check; ?>" />
         <table>
             <tr>
                 <td><button type="submit" name="button" value="C">C</button></td>
