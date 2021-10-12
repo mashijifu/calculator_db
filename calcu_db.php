@@ -9,12 +9,12 @@
 // $ope = $_POST['ope'];
 // $button = $_POST['button'];
 // $pre_button = $_POST['pre_button'];
-$input1 = $_POST['input1'];
-$input2 = $_POST['input2'];
-$ope = $_POST['ope'];
-$result = $_POST['result'];
-$button = $_POST['button'];
-$pre_button = $_POST['pre_button'];
+$input1 = $_GET['input1'];
+$input2 = $_GET['input2'];
+$ope = $_GET['ope'];
+$result = $_GET['result'];
+$button = $_GET['button'];
+$pre_button = $_GET['pre_button'];
 $file_handle = null;
 $messages = array();
 $dsn = 'mysql:host=localhost;unix_socket=/tmp/mysql.sock;dbname=calculator;charset=utf8';
@@ -25,7 +25,11 @@ $pass = '';
 try {
 
   // PDOインスタンスを生成
-  $dbh = new PDO($dsn, $user, $password);
+  $pdo = new PDO($dsn, $user, $password,[
+                PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES=>false,
+            ]);
 
 // エラー（例外）が発生した時の処理を記述
 } catch (PDOException $e) {
@@ -37,6 +41,21 @@ try {
   die();
 
 }
+
+// テーブル作成
+$tb_name='calcu_db';
+
+$sql= "CREATE TABLE IF NOT EXISTS $tb_name (
+id INT AUTO_INCREMENT PRIMARY KEY,
+input1 DECIMAL(10, 1),
+input2 DECIMAL(10, 1),
+ope TEXT,
+result DECIMAL(15, 1)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8";
+
+$stmt=$pdo->prepare($sql);
+$stmt->execute();
+
 if (isNumBtn($button) || empty($button)) {
         if (isOpeBtn($pre_button)) {
             if (preg_match('/\./', $button)) {
@@ -127,6 +146,29 @@ if (isNumBtn($button) || empty($button)) {
                 switch ($ope) {
                     case '＋':
                         $result = $input1 + $input2;
+                        try {
+                            $stmt = $pdo->prepare('INSERT INTO calcu_db (
+                                                    input1, input2, ope, result
+                                                  ) VALUES (
+                                                    :input1, :input2, :ope, :result
+                                                  )');
+                            // 値をセット
+                            $stmt->bindParam(':input1', $input1, PDO::PARAM_INT);
+                            $stmt->bindParam(':input2', $input2, PDO::PARAM_INT);
+                            $stmt->bindParam(':ope', $ope);
+                            $stmt->bindParam(':result', $result, PDO::PARAM_INT);
+                            // SQL実行
+                            $res = $stmt->execute();
+                            // コミット
+                            // if( $res ) {
+                            //     $pdo->commit();
+                            // }
+                        } catch(PDOException $e) {
+                        // エラーメッセージを出力
+                            echo $e->getMessage();
+                        // ロールバック
+                            $pdo->rollBack();
+                        }
                         // if( $file_handle = fopen( FILENAME, "a")) {
                         //             // 書き込むデータ作成
                         //         $data = $pre_num."+".$input_num."=".$disp_num."\n";
@@ -140,6 +182,29 @@ if (isNumBtn($button) || empty($button)) {
                         break;
                     case '−':
                         $result = $input1 - $input2;
+                        try {
+                            $stmt = $pdo->prepare('INSERT INTO calcu_db (
+                                                    input1, input2, ope, result
+                                                  ) VALUES (
+                                                    :input1, :input2, :ope, :result
+                                                  )');
+                            // 値をセット
+                            $stmt->bindParam(':input1', $input1, PDO::PARAM_INT);
+                            $stmt->bindParam(':input2', $input2, PDO::PARAM_INT);
+                            $stmt->bindParam(':ope', $ope);
+                            $stmt->bindParam(':result', $result, PDO::PARAM_INT);
+                            // SQL実行
+                            $res = $stmt->execute();
+                            // コミット
+                            // if( $res ) {
+                            //     $pdo->commit();
+                            // }
+                        } catch(PDOException $e) {
+                        // エラーメッセージを出力
+                            echo $e->getMessage();
+                        // ロールバック
+                            $pdo->rollBack();
+                        }
                         // if( $file_handle = fopen( FILENAME, "a")) {
                         //             // 書き込むデータ作成
                         //         $data = $pre_num."-".$input_num."=".$disp_num."\n";
@@ -153,6 +218,29 @@ if (isNumBtn($button) || empty($button)) {
                         break;
                     case '✕':
                         $result = $input1 * $input2;
+                        try {
+                            $stmt = $pdo->prepare('INSERT INTO calcu_db (
+                                                    input1, input2, ope, result
+                                                  ) VALUES (
+                                                    :input1, :input2, :ope, :result
+                                                  )');
+                            // 値をセット
+                            $stmt->bindParam(':input1', $input1, PDO::PARAM_INT);
+                            $stmt->bindParam(':input2', $input2, PDO::PARAM_INT);
+                            $stmt->bindParam(':ope', $ope);
+                            $stmt->bindParam(':result', $result, PDO::PARAM_INT);
+                            // SQL実行
+                            $res = $stmt->execute();
+                            // コミット
+                            // if( $res ) {
+                            //     $pdo->commit();
+                            // }
+                        } catch(PDOException $e) {
+                        // エラーメッセージを出力
+                            echo $e->getMessage();
+                        // ロールバック
+                            $pdo->rollBack();
+                        }
                         // if( $file_handle = fopen( FILENAME, "a")) {
                         //             // 書き込むデータ作成
                         //         $data = $pre_num."*".$input_num."=".$disp_num."\n";
@@ -166,6 +254,29 @@ if (isNumBtn($button) || empty($button)) {
                         break;
                     case '÷':
                         $result = $input1 / $input2;
+                        try {
+                            $stmt = $pdo->prepare('INSERT INTO calcu_db (
+                                                    input1, input2, ope, result
+                                                  ) VALUES (
+                                                    :input1, :input2, :ope, :result
+                                                  )');
+                            // 値をセット
+                            $stmt->bindParam(':input1', $input1, PDO::PARAM_INT);
+                            $stmt->bindParam(':input2', $input2, PDO::PARAM_INT);
+                            $stmt->bindParam(':ope', $ope);
+                            $stmt->bindParam(':result', $result, PDO::PARAM_INT);
+                            // SQL実行
+                            $res = $stmt->execute();
+                            // コミット
+                            // if( $res ) {
+                            //     $pdo->commit();
+                            // }
+                        } catch(PDOException $e) {
+                        // エラーメッセージを出力
+                            echo $e->getMessage();
+                        // ロールバック
+                            $pdo->rollBack();
+                        }
                         // if( $file_handle = fopen( FILENAME, "a")) {
                         //             // 書き込むデータ作成
                         //         $data = $pre_num."/".$input_num."=".$disp_num."\n";
@@ -217,7 +328,7 @@ $dbh = null;
 <body>
     <h2>Calculator</h2>
     <!-- <p><?php echo convertDispNum($disp_num); ?></p> -->
-    <form action="calcu_db.php" method="post">
+    <form action="calcu_db.php" method="get">
         <!-- <input type="hidden" name="disp_num" value="<?php echo $disp_num; ?>" />
         <input type="hidden" name="pre_num" value="<?php echo $pre_num; ?>" />
         <input type="hidden" name="input_num" value="<?php echo $input_num; ?>" />
@@ -266,6 +377,6 @@ $dbh = null;
             </tr>
     </form>
     <hr>
-    <a href="./calcu_history.txt" target="_blank">計算履歴</a>
+    <a href="./calcu_his.php" target="_blank">計算履歴</a>
 </body>
 </html>
