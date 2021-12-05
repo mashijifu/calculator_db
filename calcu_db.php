@@ -9,17 +9,19 @@
 // $ope = $_POST['ope'];
 // $button = $_POST['button'];
 // $pre_button = $_POST['pre_button'];
-$input1 = $_GET['input1'];
-$input2 = $_GET['input2'];
-$ope = $_GET['ope'];
-$result = $_GET['result'];
-$button = $_GET['button'];
-$pre_button = $_GET['pre_button'];
+var_dump($_POST);
+$input1 = $_POST['input1'];
+$input2 = $_POST['input2'];
+$ope = $_POST['ope'];
+$result = $_POST['result'];
+$button = $_POST['button'];
+$pre_button = $_POST['pre_button'];
 $file_handle = null;
 $messages = array();
 $dsn = 'mysql:host=localhost;unix_socket=/tmp/mysql.sock;dbname=calculator;charset=utf8';
 $user = 'root';
 $pass = '';
+$num = $_POST['num'];
 
 // tryにPDOの処理を記述
 try {
@@ -55,6 +57,30 @@ result DECIMAL(15, 1)
 
 $stmt=$pdo->prepare($sql);
 $stmt->execute();
+
+$sql = 'select input1, input2, ope, result from calcu_db';
+$stmt = $pdo->query( $sql );
+
+
+// while($re = $stmt->fetch( PDO::FETCH_ASSOC )) {
+//     $number=0;
+//     // $input1 = $re['input1'];
+//     // $input2 = $re['input2'];
+//     // $ope = $re['ope'];
+//     // $result = $re['result'];
+//     if($number == $num) {
+//         $input1 = $re['input1'];
+//         $input2 = $re['input2'];
+//         $ope = $re['ope'];
+//         $result = $re['result'];
+//     }
+//     $number++;
+// }
+
+$input1 = $_POST['in1'];
+$input2 = $_POST ['in2'];
+$ope = $_POST['op'];
+$result = $_POST['re'];
 
 if (isNumBtn($button) || empty($button)) {
         if (isOpeBtn($pre_button)) {
@@ -328,7 +354,7 @@ $dbh = null;
 <body>
     <h2>Calculator</h2>
     <!-- <p><?php echo convertDispNum($disp_num); ?></p> -->
-    <form action="calcu_db.php" method="get">
+    <form action="calcu_db.php" method="post">
         <!-- <input type="hidden" name="disp_num" value="<?php echo $disp_num; ?>" />
         <input type="hidden" name="pre_num" value="<?php echo $pre_num; ?>" />
         <input type="hidden" name="input_num" value="<?php echo $input_num; ?>" />
@@ -345,6 +371,7 @@ $dbh = null;
         <input type="text" name="result" value="<?php echo $result; ?>" />
         <!-- ボタン値判別 -->
         <input type="text" name="pre_button" value="<?php echo $pre_button; ?>" />
+        <input type="text" value="<?php echo $number; ?>" />
         <table>
             <tr>
                 <td><button type="submit" name="button" value="C">C</button></td>

@@ -24,17 +24,32 @@ try{
 $sql = 'select input1, input2, ope, result from calcu_db';
 $stmt = $pdo->query( $sql );
 
-<form method="post" name="form1" action="link.php">
-    <input type="hidden" name="user_name" value="名前">
-    <a href="javascript:form1.submit()">リンク名</a>
-
-while( $res = $stmt->fetch( PDO::FETCH_ASSOC ) ){
-  $input1 = $res['input1'];
-  $input2 = $res['input2'];
-  $ope = $res['ope'];
-  $result = $res['result'];
-  echo "<a href='calcu_db.php?data=<?=$input1, $input2, $ope, $result?>'>" . "{$res['input1']}" . "{$res['ope']}" . "{$res['input2']}" . "=" . "{$res['result']}" . "<br>" . "</a>";
-}
-</form>
-
 ?>
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>calcu_his</title>
+</head>
+<body>
+  <?php
+    foreach ($stmt->fetchAll() as $row) {
+      $num = 0;
+  ?>
+      <form method="post" name="form1" action="./calcu_db.php">
+        <input type="hidden" name="in1" value="<?php echo $row['input1']; ?>">
+        <input type="hidden" name="op" value="<?php echo $row['ope']; ?>">
+        <input type="hidden" name="in2" value="<?php echo $row['input2']; ?>">
+        <input type="hidden" name="re" value="<?php echo $row['result']; ?>">
+        <!-- echo '<input type="hidden" name="num" value="$num">'; -->
+        <!-- <a href='calcu_db.php' onclick='document.form1.submit(); return false;'><?php echo "$row[input1]" . "$row[ope]" . "$row[input2]" . "=" . "$row[result]" ?></a> -->
+        <input type="submit" class="btn btn-mid" value="<?php echo $row['input1'] . $row['ope'] . $row['input2'] . '=' . $row['result'] ?>">
+      </form>
+        <!-- echo "<a href='calcu_db.php' onclick='document.form1.submit(); return false;'>" . "$row[input1]" . "$row[ope]" . "$row[input2]" . "=" . "$row[result]" . "</a>"; -->
+      <!-- $num++; -->
+  <?php
+    }
+  ?>
+</body>
+</html>
