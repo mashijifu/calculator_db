@@ -38,16 +38,15 @@ $stmt = $pdo->query( $sql );
       $num = 0;
   ?>
       <form method="post" name="form1" action="./calcu_db.php">
-        <input type="hidden" name="in1" value="<?php echo $row['input1']; ?>">
-        <input type="hidden" name="op" value="<?php echo $row['ope']; ?>">
-        <input type="hidden" name="in2" value="<?php echo $row['input2']; ?>">
-        <input type="hidden" name="re" value="<?php echo $row['result']; ?>">
+        <input type="hidden" name="input1" value="<?php echo $row['input1']; ?>">
+        <input type="hidden" name="ope" value="<?php echo $row['ope']; ?>">
+        <input type="hidden" name="input2" value="<?php echo $row['input2']; ?>">
+        <input type="hidden" name="result" value="<?php echo $row['result']; ?>">
+        <!-- <input type="hidden" name="flag_his" value="1"> -->
         <!-- echo '<input type="hidden" name="num" value="$num">'; -->
         <!-- <a href='calcu_db.php' onclick='document.form1.submit(); return false;'><?php echo "$row[input1]" . "$row[ope]" . "$row[input2]" . "=" . "$row[result]" ?></a> -->
         <input type="submit" class="btn btn-mid" value="<?php echo $row['input1'] . $row['ope'] . $row['input2'] . '=' . $row['result'] ?>">
       </form>
-        <!-- echo "<a href='calcu_db.php' onclick='document.form1.submit(); return false;'>" . "$row[input1]" . "$row[ope]" . "$row[input2]" . "=" . "$row[result]" . "</a>"; -->
-      <!-- $num++; -->
   <?php
     }
   ?>

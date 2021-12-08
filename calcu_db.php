@@ -1,15 +1,5 @@
 <?php
 
-// 計算履歴を保存するファイルパス設定
-// define('FILENAME', './calcu_history.txt');
-
-// $disp_num = $_POST['disp_num'];
-// $pre_num = $_POST['pre_num'];
-// $input_num = $_POST['input_num'];
-// $ope = $_POST['ope'];
-// $button = $_POST['button'];
-// $pre_button = $_POST['pre_button'];
-var_dump($_POST);
 $input1 = $_POST['input1'];
 $input2 = $_POST['input2'];
 $ope = $_POST['ope'];
@@ -21,7 +11,6 @@ $messages = array();
 $dsn = 'mysql:host=localhost;unix_socket=/tmp/mysql.sock;dbname=calculator;charset=utf8';
 $user = 'root';
 $pass = '';
-$num = $_POST['num'];
 
 // tryにPDOの処理を記述
 try {
@@ -61,27 +50,6 @@ $stmt->execute();
 $sql = 'select input1, input2, ope, result from calcu_db';
 $stmt = $pdo->query( $sql );
 
-
-// while($re = $stmt->fetch( PDO::FETCH_ASSOC )) {
-//     $number=0;
-//     // $input1 = $re['input1'];
-//     // $input2 = $re['input2'];
-//     // $ope = $re['ope'];
-//     // $result = $re['result'];
-//     if($number == $num) {
-//         $input1 = $re['input1'];
-//         $input2 = $re['input2'];
-//         $ope = $re['ope'];
-//         $result = $re['result'];
-//     }
-//     $number++;
-// }
-
-$input1 = $_POST['in1'];
-$input2 = $_POST ['in2'];
-$ope = $_POST['op'];
-$result = $_POST['re'];
-
 if (isNumBtn($button) || empty($button)) {
         if (isOpeBtn($pre_button)) {
             if (preg_match('/\./', $button)) {
@@ -96,51 +64,6 @@ if (isNumBtn($button) || empty($button)) {
                 $input2 = $input2 . $button;
             }
         }
-    // if ($judge == "num1") {
-    //     // if (isOpeBtn($pre_button)) {
-    //     //     // $pre_num = $disp_num;
-    //     //     if (preg_match('/\./', $button)) {
-    //     //         // $disp_num = '0.';
-    //     //     } else {
-    //     //         // $disp_num = $button;
-    //     //     }
-    //     // } else {
-    //     //     // $disp_num = $disp_num . $button;
-    //     //     $input1 = $input1 . $button;
-    //     // }
-
-    //     // $input_num = $disp_num;
-    //     $input1 = $input1 . $button;
-    // } else {
-    //     // if (isOpeBtn($pre_button)) {
-    //     //     $pre_num = $disp_num;
-    //     //     if (preg_match('/\./', $button)) {
-    //     //         $disp_num = '0.';
-    //     //     } else {
-    //     //         $disp_num = $button;
-    //     //     }
-    //     // } else {
-    //     //     // $disp_num = $disp_num . $button;
-    //     //     $input1 = $input1 . $button;
-    //     // }
-    //     // $input_num = $disp_num;
-    //     $input2 = $input2 . $button;
-    // }
-
-// 数値や小数点ボタンが押された時または、ボタンが押されてない時
-// if (isNumBtn($button) || empty($button)) {
-//     if (isOpeBtn($pre_button)) {
-//         $pre_num = $disp_num;
-//         if (preg_match('/\./', $button)) {
-//             $disp_num = '0.';
-//         } else {
-//             $disp_num = $button;
-//         }
-//     } else {
-//         $disp_num = $disp_num . $button;
-//     }
-
-//     $input_num = $disp_num;
 
 // 数値ボタン以外が押された時（演算子や記号）
 } else {
@@ -195,16 +118,6 @@ if (isNumBtn($button) || empty($button)) {
                         // ロールバック
                             $pdo->rollBack();
                         }
-                        // if( $file_handle = fopen( FILENAME, "a")) {
-                        //             // 書き込むデータ作成
-                        //         $data = $pre_num."+".$input_num."=".$disp_num."\n";
-
-                        //         // 書き込み
-                        //         fwrite($file_handle, $data);
-
-                        //         // ファイル閉じる
-                        //         fclose($file_handle);
-                        // }
                         break;
                     case '−':
                         $result = $input1 - $input2;
@@ -231,16 +144,6 @@ if (isNumBtn($button) || empty($button)) {
                         // ロールバック
                             $pdo->rollBack();
                         }
-                        // if( $file_handle = fopen( FILENAME, "a")) {
-                        //             // 書き込むデータ作成
-                        //         $data = $pre_num."-".$input_num."=".$disp_num."\n";
-
-                        //         // 書き込み
-                        //         fwrite($file_handle, $data);
-
-                        //         // ファイル閉じる
-                        //         fclose($file_handle);
-                        // }
                         break;
                     case '✕':
                         $result = $input1 * $input2;
@@ -267,16 +170,6 @@ if (isNumBtn($button) || empty($button)) {
                         // ロールバック
                             $pdo->rollBack();
                         }
-                        // if( $file_handle = fopen( FILENAME, "a")) {
-                        //             // 書き込むデータ作成
-                        //         $data = $pre_num."*".$input_num."=".$disp_num."\n";
-
-                        //         // 書き込み
-                        //         fwrite($file_handle, $data);
-
-                        //         // ファイル閉じる
-                        //         fclose($file_handle);
-                        // }
                         break;
                     case '÷':
                         $result = $input1 / $input2;
@@ -303,22 +196,15 @@ if (isNumBtn($button) || empty($button)) {
                         // ロールバック
                             $pdo->rollBack();
                         }
-                        // if( $file_handle = fopen( FILENAME, "a")) {
-                        //             // 書き込むデータ作成
-                        //         $data = $pre_num."/".$input_num."=".$disp_num."\n";
-
-                        //         // 書き込み
-                        //         fwrite($file_handle, $data);
-
-                        //         // ファイル閉じる
-                        //         fclose($file_handle);
-                        // }
                         break;
                     default:
                         break;
                 }
             }
-            $pre_num = $input_num;
+            // $pre_num = $input_num;
+            // if ($result && isOpeBtn($pre_button)) {
+            //     $input1 = $result;
+            // }
             $ope = $button == '＝' ? $ope : $button;
             break;
     }
@@ -326,6 +212,9 @@ if (isNumBtn($button) || empty($button)) {
 }
 
 $pre_button = $button;
+if ($result && isOpeBtn($pre_button)) {
+    $input1 = $result;
+}
 
 function convertDispNum($num) {
     preg_match('/(-?)(\d+)(\.?\d*)/', $num, $matches);
@@ -355,11 +244,6 @@ $dbh = null;
     <h2>Calculator</h2>
     <!-- <p><?php echo convertDispNum($disp_num); ?></p> -->
     <form action="calcu_db.php" method="post">
-        <!-- <input type="hidden" name="disp_num" value="<?php echo $disp_num; ?>" />
-        <input type="hidden" name="pre_num" value="<?php echo $pre_num; ?>" />
-        <input type="hidden" name="input_num" value="<?php echo $input_num; ?>" />
-        <input type="hidden" name="pre_button" value="<?php echo $pre_button; ?>" />
-        <input type="hidden" name="ope" value="<?php echo $ope; ?>" /> -->
         <!-- 入力値1 -->
         <input type="text" name="input1" value="<?php echo $input1; ?>" />
          <!-- 演算子 -->
@@ -371,7 +255,6 @@ $dbh = null;
         <input type="text" name="result" value="<?php echo $result; ?>" />
         <!-- ボタン値判別 -->
         <input type="text" name="pre_button" value="<?php echo $pre_button; ?>" />
-        <input type="text" value="<?php echo $number; ?>" />
         <table>
             <tr>
                 <td><button type="submit" name="button" value="C">C</button></td>
