@@ -254,7 +254,7 @@ $dbh = null;
         <!-- 計算結果値 -->
         <input type="text" name="result" value="<?php echo $result; ?>" />
         <!-- ボタン値判別 -->
-        <input type="text" name="pre_button" value="<?php echo $pre_button; ?>" />
+        <!-- <input type="text" name="pre_button" value="<?php echo $pre_button; ?>" /> -->
         <table>
             <tr>
                 <td><button type="submit" name="button" value="C">C</button></td>
